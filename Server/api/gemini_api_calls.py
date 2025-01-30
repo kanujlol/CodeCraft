@@ -26,21 +26,43 @@ def generate_hints(data):
         experience = data.get("experience", "0 years")
         prev_response = data.get("prev_response", "")
         code = data.get("code", "")
+        status=data.get("status","")
+        
 
         examples = {
-            "syntax": "Example: Missing a colon at the end of a Python 'if' statement.",
-            "runtime": "Example: Trying to access a variable that hasn't been initialized.",
-            "tle": "Example: Using a nested loop for large inputs causing inefficiency.",
-            "accepted": "Example: Your code ran successfully and produced the correct output."
+            "syntax": [
+                "Hint 1: Check if you've missed any punctuation, like `:` or `()` in your code. Small syntax mistakes can cause big errors!",
+                "Hint 2: It looks like you might have forgotten a `:` at the end of a statement, such as an `if`, `for`, or `while` in Python.",
+                "Hint 3: Ensure that every control statement (`if`, `for`, `while`, `def`, `class`) ends with a colon (`:`) to avoid syntax errors."
+            ],
+            "runtime": [
+                "Hint 1: You're using a variable that may not have been assigned a value yet. Check your variable declarations.",
+                "Hint 2: A variable is being accessed before it's defined. Look for missing assignments before usage.",
+                "Hint 3: Ensure that every variable is initialized before use. For example: `x = 0` before `print(x)`, instead of directly using `print(x)`."
+            ],
+            "tle": [
+                "Hint 1: Your code is taking too long to execute. Consider optimizing loops or using efficient algorithms.",
+                "Hint 2: You may be using nested loops on large inputs. Try reducing complexity, such as using hashing or binary search.",
+                "Hint 3: Replace `O(n^2)` approaches with efficient ones like sorting + binary search (`O(n log n)`) or use memoization to avoid redundant calculations."
+            ],
+            "accepted": [
+                "Example: Your code ran successfully and produced the correct output."
+            ],
+            "logical": [
+                "Hint 1: Logical error: Please review your logic.",
+                "Hint 2: Logical error: Please review your logic.",
+                "Hint 3: Logical error: Please review your logic."
+            ]
         }
+
         example_hint = ""
-        if "syntax" in error.lower():
+        if "syntax" in status.lower():
             example_hint = examples["syntax"]
-        elif "runtime" in error.lower():
+        elif "runtime" in status.lower():
             example_hint = examples["runtime"]
-        elif "time limit exceeded" in error.lower():
+        elif "time limit exceeded" in status.lower():
             example_hint = examples["tle"]
-        elif "accepted" in error.lower():
+        elif "accepted" in status.lower():
             example_hint = examples["accepted"]
 
         # Define the dynamic prompt
@@ -58,17 +80,23 @@ def generate_hints(data):
 
         Compile Response:
         - Error: {error}
-
+        - Current status : {status}
         Previous Response:
         {prev_response}
 
         Respond dynamically:
-        1. Provide exactly three hints: a small hint, a medium hint, and a big hint.
+        1. Provide exactly three hints: hint1 , hint2, and hint3.
         2. Each hint should not exceed two lines.
         3. Avoid providing direct solutions but guide them toward fixing the issue.
         4. Ensure the hints are clear and different from the previous response.
-
-        Additional Example Based on Error Type:
+        5. Generate three progressive hints for a given error type. If the error is a syntax, runtime, or time-limit-exceeded (TLE) error, ensure the hints follow a logical progression like a thread:
+            Hint 1 should be a basic nudge in the right direction.
+            Hint 2 should provide more details, narrowing down the issue.
+            Hint 3 should be a clear and actionable solution.
+           If a threaded progression isn't possible, provide the best hints separately
+        6. If the error is related to syntax, runtime issues, or time limits, offer appropriate hints. These could include advice on debugging common issues, optimizing the code, or fixing syntactical mistakes.
+        7. For logical errors, avoid giving technical hints. Instead, provide the following general hint: "Logical error: Please review your logic." This encourages the user to check their thought process or approach and find the root cause of the issue themselves.
+         Additional Example Based on Error Type:
         {example_hint}
 
         Dynamic Response:
