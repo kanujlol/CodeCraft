@@ -78,7 +78,7 @@ export default function Login() {
     
   return (
     <form className="space-y-6 px-6 pb-4" onSubmit={handleLogin}>
-      <h3 className="text-xl font-medium text-white">Sign in to LeetClone</h3>
+      <h3 className="text-xl font-medium text-white">Sign in to CodeCraft</h3>
       <div>
         <label
           htmlFor="email"

@@ -88,7 +88,9 @@ export default function Topbar({ problemPage }) {
                                     openLoginModal
                                 }
                             >
-                                <button className="bg-brand-purple py-1 px-2 cursor-pointer rounded hover:opacity-70">Sign In</button>
+                                <button className="bg-brand-purple py-1 px-2 cursor-pointer rounded hover:opacity-70">
+                                    Sign In
+                                </button>
                             </Link>
                         )}
 

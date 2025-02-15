@@ -119,7 +119,7 @@ export default function SignUp() {
   return (
     
     <form className="space-y-6 px-6 pb-1 overflow-y-auto h-96" onSubmit={handleRegister}>
-      <h3 className="text-xl font-medium text-white my-10">Register to LeetClone</h3>
+      <h3 className="text-xl font-medium text-white my-10">Register to CodeCraft</h3>
       
       <div>
         <label htmlFor="name" className="text-sm font-medium block mb-2 text-gray-300">
