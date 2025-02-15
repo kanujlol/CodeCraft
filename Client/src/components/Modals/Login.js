@@ -92,10 +92,8 @@ export default function Login() {
           name="email"
           //autoComplete='email'
           id="email"
-          className="
-    border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-    bg-gray-600 border-gray-500 placeholder-gray-400 text-white
-"
+          className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+    bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
           placeholder="name@company.com"
         />
       </div>
@@ -122,13 +120,13 @@ export default function Login() {
       <button
         type="submit"
         className="w-full text-white focus:ring-blue-300 font-medium rounded-lg
-        text-sm px-5 py-2.5 text-center bg-brand-orange hover:bg-brand-orange-s
+        text-sm px-5 py-2.5 text-center bg-brand-purple hover:bg-opacity-80
     ">
         {loading ? "Loading..." : "Log In"}
       </button>
       <div className="flex w-full justify-end">
         <button
-           className="text-sm block text-brand-orange hover:underline w-full text-right"
+           className="text-sm block text-gray-300 hover:underline w-full text-right"
            onClick={() => handleClick("forgotPassword")}
         >
         Forgot Password?
@@ -138,9 +136,9 @@ export default function Login() {
       <div className="text-sm font-medium text-gray-300">
         Not Registered?{" "}
         <Link
-          to='/auth/signup'
+          //to='/auth/signup'
           className="text-blue-700 hover:underline"
-          // onClick={() => handleClick("register")}
+          onClick={() => handleClick("register")}
         >
           Create account
         </Link>

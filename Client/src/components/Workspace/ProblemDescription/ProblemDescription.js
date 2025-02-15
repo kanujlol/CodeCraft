@@ -8,7 +8,7 @@ export default function ProblemDescription({ problem }) {
 	return (
 		<div className='bg-dark-layer-1'>
 			{/* TAB */}
-			<div className='flex h-11 w-full items-center pt-2 bg-dark-layer-2 text-white overflow-x-hidden'>
+			<div className='flex h-11 w-full items-center pt-2 bg-brand-purple text-white overflow-x-hidden'>
 				<div className={"bg-dark-layer-1 rounded-t-[5px] px-5 py-[10px] text-xs cursor-pointer"}>
 					Description
 				</div>

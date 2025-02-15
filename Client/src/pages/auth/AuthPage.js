@@ -45,11 +45,11 @@ export default function AuthPage() {
   if (pageLoading) return null;
 
   return (
-    <div className="bg-gradient-to-b from-gray-600 to-black h-fit relative ">
+    <div className="bg-gradient-to-b h-fit relative " style={{ background: 'linear-gradient(to bottom, rgb(26, 18, 11), rgb(39, 24, 58)' }}>
       <div className="max-w-7xl mx-auto">
         <Navbar />
         <div className="flex items-center justify-center h-[calc(100vh-5rem)] pointer-events-none select-none ">
-          <img src="/hero.png" alt="Hero img" width={700} height={700} />
+        <img src="/hero.png" alt="Hero img" width={700} height={700} />
         </div>
         { authModal.isOpen && <AuthModal/>}
       </div>

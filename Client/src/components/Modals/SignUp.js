@@ -117,8 +117,9 @@ export default function SignUp() {
     }, [error]);
     
   return (
-    <form className="space-y-6 px-6 pb-4 overflow-y-auto " onSubmit={handleRegister}>
-      <h3 className="text-xl font-medium text-red-700 my-10">Register to LeetClone</h3>
+    
+    <form className="space-y-6 px-6 pb-1 overflow-y-auto h-96" onSubmit={handleRegister}>
+      <h3 className="text-xl font-medium text-white my-10">Register to LeetClone</h3>
       
       <div>
         <label htmlFor="name" className="text-sm font-medium block mb-2 text-gray-300">
@@ -288,7 +289,7 @@ export default function SignUp() {
       <button
         type="submit"
         className="w-full text-white focus:ring-blue-300 font-medium rounded-lg
-            text-sm px-5 py-2.5 text-center bg-brand-orange hover:bg-brand-orange-s
+            text-sm px-5 py-2.5 text-center bg-brand-purple hover:opacity-80
         "
       >
         {loading ? "Registering..." : "Register"}
