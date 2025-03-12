@@ -468,7 +468,7 @@ function useGetUsersDataOnProblem(problemId){
 				const { data,error } = await supabase
 				.from('users')
 				.select('likedProblems,dislikedProblems,starredProblems,solvedProblems')
-				.eq('id',user.id)
+				.eq('email',user.email)
 				//console.log(data[0])
 
 
