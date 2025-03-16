@@ -1,13 +1,14 @@
 import os
 import json
+import requests
 import google.generativeai as genai
+from .resources import format_resources
 from dotenv import load_dotenv
 
-# Load environment variables
 dotenv_path = '.env'
 load_dotenv(dotenv_path)
 
-# Initialize Gemini with API key
+
 gemini_api_key = os.getenv("gemini_api_key")
 if gemini_api_key:
     genai.configure(api_key=gemini_api_key)
@@ -15,10 +16,9 @@ if gemini_api_key:
 # Function to generate hints
 def generate_hints(data):
     try:
-        # Define the model
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-2.0-flash")
 
-        # Extract dynamic attributes from the request
+
         error = data.get("error", "Unknown Error")
         profession = data.get("profession", "developer")
         age = data.get("age", 25)
@@ -65,48 +65,52 @@ def generate_hints(data):
         elif "accepted" in status.lower():
             example_hint = examples["accepted"]
 
-        # Define the dynamic prompt
+
         prompt = f"""
-        You are an assistant helping users debug their code. Tailor your suggestions dynamically based on the user's attributes and error.
+        You are an AI assistant helping users debug their code. Provide tailored suggestions based on the user's attributes and the error encountered.
 
-        User Info:
-        - Profession: {profession}
-        - Age: {age}
-        - Level: {level}
-        - Experience: {experience}
+        ### User Info:
+        - **Profession:** ```{profession}```
+        - **Age:** ```{age}```
+        - **Level:** ```{level}```
+        - **Experience:** ```{experience}```
 
-        Code Snippet:
-        {code}
+        ### Code Snippet:
+        ```{code}```
 
-        Compile Response:
-        - Error: {error}
-        - Current status : {status}
-        Previous Response:
-        {prev_response}
+        ### Compile Response:
+        - **Error:** ```{error}```
+        - **Current Status:** ```{status}```
+        - **Previous Response:** ```{prev_response}```
 
-        Respond dynamically:
-        1. Provide exactly three hints: hint1 , hint2, and hint3.
-        2. Each hint should not exceed two lines.
-        3. Avoid providing direct solutions but guide them toward fixing the issue.
-        4. Ensure the hints are clear and different from the previous response.
-        5. Generate three progressive hints for a given error type. If the error is a syntax, runtime, or time-limit-exceeded (TLE) error, ensure the hints follow a logical progression like a thread:
-            Hint 1 should be a basic nudge in the right direction.
-            Hint 2 should provide more details, narrowing down the issue.
-            Hint 3 should be a clear and actionable solution.
-           If a threaded progression isn't possible, provide the best hints separately
-        6. If the error is related to syntax, runtime issues, or time limits, offer appropriate hints. These could include advice on debugging common issues, optimizing the code, or fixing syntactical mistakes.
-        7. For logical errors, avoid giving technical hints. Instead, provide the following general hint: "Logical error: Please review your logic." This encourages the user to check their thought process or approach and find the root cause of the issue themselves.
-         Additional Example Based on Error Type:
-        {example_hint}
+        ### Instructions for Response:
+        1. Provide exactly **three progressive hints**: `hint1`, `hint2`, and `hint3`.
+        2. Each hint must not exceed **two lines**.
+        3. **Avoid direct solutions**—instead, guide the user toward debugging effectively.
+        4. Ensure hints are **distinct from the previous response**.
+        5. **Logical Progression for Errors:**
+        - **Syntax, Runtime, or TLE Errors:**  
+            - *Hint 1:* A **basic nudge** in the right direction.  
+            - *Hint 2:* A **detailed narrowing down** of the issue.  
+            - *Hint 3:* A **clear, actionable step** to resolve it.
+        - **Logical Errors:** Instead of technical hints, return:  
+            `"Logical error: Please review your logic."`  
+            This encourages users to analyze their approach independently.
+        6. If applicable, include general debugging advice like common syntax fixes, runtime optimizations, or efficiency improvements.
 
-        Dynamic Response:
+        ### Example Hints Based on Error Type:
+        ```{example_hint}```
+
+        ### Dynamic Response:
         """
+
 
         response = model.generate_content(prompt)
         return response.text
 
     except Exception as e:
         return {"error": f"Error occurred: {str(e)}"}
+
 
 # Function to handle AskAI request
 def ask_ai(data):
@@ -117,40 +121,77 @@ def ask_ai(data):
         level = data.get("level", "beginner")
         experience = data.get("experience", "0 years")
         prev_response = data.get("prev_response", "")
-
-        prompt = f"""
-        You are an advanced teaching assistant capable of breaking down complex topics for users based on their profession, age, experience, and skill level.
-
-        Topic: {topic}
-        User Info:
-        - Profession: {profession}
-        - Age: {age}
-        - Level: {level}
-        - Experience: {experience}
-
-        Previous Response:
-        {prev_response}
-
-        Provide a detailed and structured explanation of the topic in the following format:
-
-        1. Objective/Definition: Clearly define the topic and its purpose.
-        2. Intuition: Explain the fundamental idea behind the topic to build user understanding.
-        3. Best Approach: Describe the most efficient or commonly used approach to implement the topic.
-        4. Code Examples:
-            - Provide code in C++.
-            - Provide code in Python.
-            - Provide code in Java.
-        5. Dry Run: Walk through an example step-by-step to show how the topic is applied.
-        6. Complexity Analysis: Provide a detailed explanation of the complexities involved.
-            - Time Complexity: Explain how the time complexity is derived and what factors influence it.
-            - Space Complexity: Explain how memory usage is calculated and optimized.
-        7. Ensure the explanation is clear and detailed than the previous response if available.
-        8. also ensure that give responses only if the requested topic is related to computer science and also give a warning if any inappropriate question is asked.
-        """
+        language=data.get("prefered_language","cpp")
+        additional_resources = format_resources(topic) 
+       
         
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        response = model.generate_content(prompt)
-        return response.text
+        prompt = f"""
+        You are an advanced teaching assistant, skilled in simplifying complex computer science topics based on the user's profession, age, experience, and skill level.
 
+        ### Topic:
+        ```{topic}```
+
+        ### User Profile:
+        - **Profession:** ```{profession}```
+        - **Age:** ```{age}```
+        - **Skill Level:** ```{level}```
+        - **Experience:** ```{experience}```
+
+        ### Previous Response (if applicable):
+        ```{prev_response}```
+
+        ### Instructions:
+        1. **Ensure the topic is computer science-related.**  
+        - If the topic is unrelated or inappropriate, return a polite warning instead of an explanation.  
+
+        2. **Dynamically structure responses** based on the topic, rather than following a rigid format.  
+        - Use **the most suitable headings** while ensuring all key aspects are covered.  
+
+        3. **Provide a well-structured, in-depth explanation** that enhances clarity and depth, ensuring it is more informative than any previous response (if applicable), without explicitly referencing the comparison.
+
+        ### Expected Breakdown (Adapt Based on Topic):
+        - **Objective/Definition:** A precise definition and purpose of the topic.  
+        - **Intuition:** Explain the fundamental idea in an easy-to-understand manner.  
+        - **Best Approach:** Describe the most efficient method or commonly used technique.  
+        - **Code Implementation (if applicable):**  
+        - Provide clean, well-formatted code in ```{language}```.  
+        - **Step-by-Step Dry Run:** Walk through an example to demonstrate real-world application.  
+        - **Complexity Analysis:**  
+        - **Time Complexity:** Derive and explain influencing factors.  
+        - **Space Complexity:** Analyze memory usage and possible optimizations.  
+
+
+        ### Response Format:
+        Ensure responses are well-structured, adaptive, and **not bound to a fixed sequence**, allowing flexibility in presentation while maintaining completeness.  
+
+       """
+        
+        model = genai.GenerativeModel("gemini-2.0-flash")
+
+        response = model.generate_content(prompt)
+        if hasattr(response, "text"):
+            response_text = response.text  # Extract the actual string response
+        else:
+            response_text = str(response)  # Fallback if response structure is different
+
+        full_response = f"{response_text}\n\n{additional_resources}"
+        return full_response
     except Exception as e:
         return {"error": f"Error occurred: {str(e)}"}
+    
+
+    #prompt engineering
+
+    #Principle 1: Write clear and specific instructions
+        # Tactic 1: Use delimiters to clearly indicate distinct parts of the input-used to avoid prompt injections
+        # Tactic 2: Use formatting to make the input more readable-Ask for a structured output
+        # Tactic 3: Ask the model to check whether conditions are satisfied
+        # Tactic 4: "Few-shot" prompting-give an example
+    
+    #Principle 2: Give the model time to “think”
+        # Tactic 1: Specify the steps required to complete a task
+        # Tactic 2: Instruct the model to work out its own solution before rushing to a conclusion
+    
+
+
+
