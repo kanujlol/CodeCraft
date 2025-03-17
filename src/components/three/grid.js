@@ -30,41 +30,12 @@ const App =() => {
     const [userDetails, setUserDetails] = useState({
       profession: "",
       age: 0,
-      experience: 0,
-      level: "",
+      experience: "",
+      level: 0,
     });
   const [allTopics, setAllTopics] = useState([]);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
 
-  useEffect(() => {
-    // Fetch all topics from the "topics" table
-    const fetchAllTopics = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-          // Handle case where user is not logged in
-          return;
-        }
-        
-        const { data: topicsData } = await supabase
-          .from('topics')
-          .select('topics')
-          .eq('email', user.email);
-  
-        if (topicsData.length) {
-          // Extract topic names and update state
-          const topics = Object.keys(topicsData[0].topics);
-          setAllTopics(topics);
-        }
-      } catch (error) {
-        console.error('Error fetching topics:', error);
-      }
-    };
-    
-    fetchAllTopics();
-  }, []); // Run the effect only once on mount
-  
-  
   useEffect(() => {
 
     if (!isLoading && result) {
@@ -224,119 +195,10 @@ const App =() => {
         );
       };
       
-      const getUserTopics = async (email) => {
-        try {
-          // Get the existing user topics from the "topics" table
-          const { data: existingTopics } = await supabase
-            .from('topics')
-            .select('topics')
-            .eq('email', email);
-      
-          // If topics exist for the user, print each topic and its status
-          if (existingTopics.length) {
-            const userTopics = existingTopics[0].topics;
-            //setUTopics(userTopics)
-            console.log('User Topics:');
-            console.log("added",userTopics)
-           
-            for (const topic in userTopics) {
-              const status = userTopics[topic] === 0 ? 'Not Assigned' : 'Assigned';
-              console.log(`${topic}: ${status}`);
-            }
-          } else {
-            console.log('No topics found for the user.');
-          }
-        } catch (error) {
-          console.error('Error getting user topics:', error);
-        }
-      };
 
-      
-      const storeUserTopics = async (email, topic) => {
-        try {
-          // Get the existing user topics from the "topics" table
-          console.log("check meial",email)
-          const { data: existingTopics } = await supabase
-            .from('topics')
-            .select('topics')
-            .eq('email', email);
-      
-          // Parse the existing topics JSON string or initialize an empty object
-          const userTopics = existingTopics.length ? (existingTopics[0].topics) : {};
-      
-          // Update the user's topic status (1 means selected in this case)
-          userTopics[topic] = 0;
-      
-          // Update the "topics" table with the new topics JSON string
-          await supabase
-            .from('topics')
-            .upsert([
-              {
-                email: email,
-                topics: (userTopics),
-              },
-            ]);
-      
-          console.log('User topics updated successfully:', userTopics);
-          
-        } catch (error) {
-          console.error('Error updating user topics:', error);
-        }
-      };
-
-      const handleDelete = async (topicToDelete) => {
-        console.log("to dlete",topicToDelete)
-        const { data: {user} } = await supabase.auth.getUser();
-        console.log()
-      
-        if (!user) {
-          // Handle user not logged in
-          return;
-        }
-      
-        try {
-          // Fetch the existing user topics from the "topics" table
-          console.log("deletion",user.email)
-          const { data: existingmainTopics } = await supabase
-            .from('topics')  // Replace with your actual table name
-            .select('topics')
-            .eq('email', user.email);
-
-          console.log("topics existing",existingmainTopics)
-      
-          if (existingmainTopics.length) {
-            // Get the current user topics
-            const userTopics = existingmainTopics[0].topics;
-            console.log("to delete topic :",userTopics)
-      
-            // Delete the specified topic
-            delete userTopics[topicToDelete];
-
-            console.log(userTopics,"after")
-            setAllTopics((prevTopics) => prevTopics.filter((topic) => topic !== topicToDelete));
-      
-            // Update the "topics" table with the new topics JSON string
-            await supabase
-              .from('topics')  // Replace with your actual table name
-              .upsert([
-                {
-                  email: user.email,
-                  topics: (userTopics),
-                },
-              ])
-              .eq('email',user.email);
-      
-            console.log(`Topic "${topicToDelete}" deleted successfully`);
-          } else {
-            console.log('No topics found for the user.');
-          }
-        } catch (error) {
-          console.error('Error deleting user topic:', error);
-        }
-      };
-
+  
     const handleSubmit = async (maintopic) => {
-      setTopic(maintopic)
+      setTopic(maintopic);
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
@@ -347,20 +209,7 @@ const App =() => {
       try {
         setIsLoading(true);
         setIsLoadingButton(true);
-        const responselinks = await fetch('http://localhost:8081/api', {
-        method: "POST",
-        headers: {
-        "Content-Type": "application/json",
-        },
-
-          body: JSON.stringify({ topic }),
-
-        });
-  
-        const linkset = await responselinks.json();
-        console.log(linkset.result)
-        setLinkClub(linkset.result);
-
+       
         const { data } = await supabase
           .from('users')
           .select('*')
@@ -371,7 +220,7 @@ const App =() => {
 
         setUserDetails({
           profession: data[0].profession,
-          age: data[0].ageGroup,
+          age: data[0].age,
           experience: data[0].experience,
           level: data[0].level,
         });
@@ -382,12 +231,14 @@ const App =() => {
           "topic": maintopic,
           "profession": userDetails.profession,
           "age": userDetails.age,
-          "experience": userDetails.experience,
           "level": userDetails.level,
+          "experience": userDetails.experience,
+          "prev_response": JSON.parse(localStorage.getItem("ai-prev-response"))
+         
         };
 
         console.log("REQUEST BODY :",JSON.stringify(apiRequestBody))
-        const response = await fetch("http://127.0.0.1:8000/learnaskai", {
+        const response = await fetch("http://127.0.0.1:8000/askai/", {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -405,9 +256,7 @@ const App =() => {
         setResult(responseData.content);
         console.log("result",responseData.content)
 
-        // Store the user topics in the "users" table
-     // Assuming 1 means the topic is selected
-     storeUserTopics(user.email,maintopic);
+  
     
 
         const key ="AIzaSyA_cxjTyiZMP1vU26kEsJkiKIPUHD-7QCg"
@@ -420,7 +269,7 @@ const App =() => {
 
       const yData = await yresponse.json();
       setVideoLink(yData.items);
-      getUserTopics(user.email);
+
 
     } catch (error) {
       console.error("Error:", error);
@@ -441,7 +290,7 @@ const App =() => {
         <button className={styles1.quer}>
             <img className={styles1.image1} onClick={() => handleTopicButtonClick(item)} src={msgIcon} alt="query" />
             {item}
-            <img className={styles1.image2} src={Del} onClick={() => handleDelete(item)} alt="query" />
+            <img className={styles1.image2} src={Del}  alt="query" />
         </button>
     </div>
 ))}

@@ -42,7 +42,7 @@ export default function Playground({problem, setSuccess}) {
       const { data,error } = await supabase
       .from('users')
       .select()
-      .eq('id',user.id)
+      .eq('email',user.email)
       
       if(data[0].aipoints===0)
       {
@@ -50,15 +50,18 @@ export default function Playground({problem, setSuccess}) {
         setAsking(false)
         return;
       }
-      const apiUrl = 'http://127.0.0.1:8000/askai';
+      const apiUrl = 'http://127.0.0.1:8000/hints/';
       
       const requestBody = {
         "error":submitMessage,
+        "status":submitMessage,
         "profession":data[0].profession,
-        "experience":data[0].experience,
+        "age":data[0].age,
         "level":data[0].level,
+        "experience":data[0].experience,
         "prev_response":JSON.parse(localStorage.getItem(`ai-${problem.id}`)),
-        "age":data[0].ageGroup
+        "code":userCode
+        
       }
 
       try {
@@ -84,17 +87,17 @@ export default function Playground({problem, setSuccess}) {
             const { error } = await supabase
             .from('users')
             .update({ aipoints: data[0].aipoints - 10 })
-            .eq('id', user.id)
+            .eq('email', user.email)
 
-            setAskMessage(responseData.content)
+            setAskMessage(responseData.response)
             localStorage.setItem(`ai-${problem.id}`,JSON.stringify(askMessage))
             setTestTab(2)
           //add to solved array if not present
         }
         else{
-          setAskMessage(responseData.content)
+          setAskMessage(responseData.response)
           setTestTab(2)
-          toast.error(responseData.content, { position: "top-center", autoClose: 3000, theme: "dark" });
+          toast.error(responseData.response, { position: "top-center", autoClose: 3000, theme: "dark" });
         }
       } catch (error) {
         console.error('Error:', error.message);
@@ -112,15 +115,15 @@ export default function Playground({problem, setSuccess}) {
     }
     if(submitting) return;
     setSubmitting(true)
-      const apiUrl = 'http://127.0.0.1:8000/compile';
+      const apiUrl = 'http://127.0.0.1:8000/compile/';
       const language = JSON.parse(localStorage.getItem('selected_language'));
       
       const requestBody = {
         source_code: userCode,
         language_id:language.id ,
-        inputs: currentProblem.inputs,
-        outputs: currentProblem.outputs,
+       testcases: currentProblem.testcases,
       };
+      console.log(requestBody);
 
       try {
         const response = await fetch(apiUrl, {
@@ -134,11 +137,11 @@ export default function Playground({problem, setSuccess}) {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: `);
         }
-
+        console.log(response);
         const responseData = await response.json();
         console.log(responseData)
-
-        if(responseData.status.id === 3)
+        
+        if(responseData.status === 3)
         {
             toast.success("Congrats! All tests passed!", { position: "top-center", autoClose: 3000, theme: "dark" });
             setSuccess(true);
@@ -151,12 +154,12 @@ export default function Playground({problem, setSuccess}) {
           const { data,error } = await supabase
             .from('users')
             .select()
-            .eq('id',user.id)
+            .eq('email',user.email)
     
             // console.log(data[0].solvedProblems)
     
             setSolved(data[0].solvedProblems)
-            setSubmitMessage(responseData.status.description)
+            setSubmitMessage(responseData.description)
             setTestTab(1)
           //add to solved array if not present
           if(!(solved.includes(problem.id)))
@@ -164,7 +167,7 @@ export default function Playground({problem, setSuccess}) {
             const { error1 } = await supabase
             .from('users')
             .update({ solvedProblems:[...solved,problem.id] })
-            .eq('id', user.id)
+            .eq('email', user.email)
       
             if(error1) console.log(error1)
             const pointsToAdd = currentProblem.difficulty === "Easy" ? 10 : currentProblem.difficulty === "Medium" ? 20 : 30;
@@ -172,15 +175,15 @@ export default function Playground({problem, setSuccess}) {
             const { error2 } = await supabase
               .from('users')
               .update({ points: data[0].points + pointsToAdd })
-              .eq('id', user.id);
+              .eq('email', user.email);
         
             if (error2) console.log(error2);
           }
         }
         else{
-          setSubmitMessage(responseData.status.description)
+          setSubmitMessage(responseData.description)
           setTestTab(1)
-          toast.error(responseData.status.description, { position: "top-center", autoClose: 3000, theme: "dark" });
+          toast.error(responseData.description, { position: "top-center", autoClose: 3000, theme: "dark" });
         }
       } catch (error) {
         console.error('Error:', error.message);

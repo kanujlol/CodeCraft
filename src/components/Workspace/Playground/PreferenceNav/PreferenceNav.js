@@ -7,24 +7,24 @@ export default function PreferenceNav({settings,setSettings}) {
 	const [languages, setLanguages] = useState([]);
 	const [loadingLanguages,setLoadingLanguages] = useState(true)
 	const [selectedLanguage, setSelectedLanguage] = useState(null)
-	// console.log(selectedLanguage)
+	console.log(selectedLanguage)
 	
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-			  const response = await fetch('http://127.0.0.1:8000/languages');
+			  const response = await fetch('http://127.0.0.1:8000/languages/');
 		  
 			  if (!response.ok) {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			  }
 		  
 			  const data = await response.json();
-		  
+		      console.log(data)
 			  // Log the response for further investigation
 			//   console.log('Response:', data.languages);
 		  
 			  // Set languages in the state
-			  setLanguages(data.languages);
+			  setLanguages(data);
 			  // Set an initial default language if needed
 			  setSelectedLanguage(JSON.parse(localStorage.getItem('selected_language'))|| languages[0])
 			} catch (error) {

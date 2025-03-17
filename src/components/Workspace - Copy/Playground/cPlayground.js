@@ -40,15 +40,15 @@ export default function Playground({problem, setSuccess}) {
     }
     if(submitting) return;
     setSubmitting(true)
-      const apiUrl = 'http://127.0.0.1:8000/compile';
+      const apiUrl = 'http://127.0.0.1:8000/compile/';
       const language = JSON.parse(localStorage.getItem('selected_language'));
       
       const requestBody = {
         source_code: userCode,
         language_id:language.id ,
-        inputs: currentProblem.inputs,
-        outputs: currentProblem.outputs,
+        testcases: currentProblem.testcases
       };
+      console.log(requestBody);
 
       try {
         const response = await fetch(apiUrl, {

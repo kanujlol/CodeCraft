@@ -126,13 +126,13 @@ export default function ProblemDescription({ problem }) {
 			.eq('id', problem.id)
 
 			if(error1) console.log(error1)
-
+     
 			//remove from liked array
 			const { error2 } = await supabase
 			.from('users')
 			.update({ likedProblems: userDoc.likedProblems.filter((id) => id !== problem.id) })
-			.eq('id', user.id)
-
+			.eq('email', user.email)
+           
 			if(error2) console.log(error2)
 
 			//Update UI
@@ -144,7 +144,7 @@ export default function ProblemDescription({ problem }) {
 			const { error1 } = await supabase
 			.from('users')
 			.update({ likedProblems: [...userDoc.likedProblems,problem.id], dislikedProblems: userDoc.dislikedProblems.filter((id) => id !== problem.id)  })
-			.eq('id', user.id)
+			.eq('email', user.email)
 
 			if(error1) console.log(error1)
 
@@ -172,7 +172,7 @@ export default function ProblemDescription({ problem }) {
 			const { error2 } = await supabase
 			.from('users')
 			.update({ likedProblems: [...userDoc.likedProblems,problem.id]})
-			.eq('id', user.id)
+			.eq('email', user.email)
 
 			if(error2) console.log(error2)
 
@@ -210,7 +210,7 @@ export default function ProblemDescription({ problem }) {
 			const { error2 } = await supabase
 			.from('users')
 			.update({ dislikedProblems: userDoc.dislikedProblems.filter((id) => id !== problem.id) })
-			.eq('id', user.id)
+			.eq('email', user.email)
 
 			if(error2) console.log(error2)
 
@@ -223,7 +223,7 @@ export default function ProblemDescription({ problem }) {
 			const { error1 } = await supabase
 			.from('users')
 			.update({ dislikedProblems: [...userDoc.dislikedProblems,problem.id], likedProblems: userDoc.likedProblems.filter((id) => id !== problem.id)  })
-			.eq('id', user.id)
+			.eq('email', user.email)
 
 			if(error1) console.log(error1)
 
@@ -251,7 +251,7 @@ export default function ProblemDescription({ problem }) {
 			const { error2 } = await supabase
 			.from('users')
 			.update({ dislikedProblems: [...userDoc.dislikedProblems,problem.id]})
-			.eq('id', user.id)
+			.eq('email', user.email)
 
 			if(error2) console.log(error2)
 
@@ -280,7 +280,7 @@ export default function ProblemDescription({ problem }) {
 			const { error1 } = await supabase
 			.from('users')
 			.update({ starredProblems: userDoc.starredProblems.filter((id) => id !== problem.id)  })
-			.eq('id', user.id)
+			.eq('email', user.email)
 
 			if(error1) console.log(error1)
 
@@ -291,7 +291,7 @@ export default function ProblemDescription({ problem }) {
 			const { error1 } = await supabase
 			.from('users')
 			.update({ starredProblems: [...userDoc.starredProblems,problem.id]})
-			.eq('id', user.id)
+			.eq('email', user.email)
 
 			if(error1) console.log(error1)
 
@@ -365,7 +365,7 @@ export default function ProblemDescription({ problem }) {
 							<CircleSkeleton />
 						  </div>
 						)}
-
+                        <br></br>
 						{/* Problem Statement(paragraphs) */}
 						{!loading && currentProblem && (<div className='text-white text-sm'>
 							<div dangerouslySetInnerHTML={{ __html: currentProblem.problem_statement }} />
@@ -469,7 +469,7 @@ function useGetUsersDataOnProblem(problemId){
 				.from('users')
 				.select('likedProblems,dislikedProblems,starredProblems,solvedProblems')
 				.eq('email',user.email)
-				//console.log(data[0])
+				console.log(data[0])
 
 
 				const { solvedProblems, likedProblems, dislikedProblems, starredProblems } = data[0];
