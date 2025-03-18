@@ -33,7 +33,7 @@ function CodeEditor() {
           }
         });
       }
-    }, 4000); // Small delay to allow WebRTC connections to establish
+    }, 2000); // Small delay to allow WebRTC connections to establish
 
     provider.awareness.setLocalStateField("user", {
       name: "User " + Math.floor(Math.random() * 100),
