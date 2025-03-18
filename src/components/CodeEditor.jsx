@@ -33,7 +33,7 @@ function CodeEditor() {
           }
         });
       }
-    }, 2000); // Small delay to allow WebRTC connections to establish
+    }, 4000); // Small delay to allow WebRTC connections to establish
 
     provider.awareness.setLocalStateField("user", {
       name: "User " + Math.floor(Math.random() * 100),
@@ -48,18 +48,8 @@ function CodeEditor() {
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
     const yText = ydocRef.current.getText("monaco");
-  
-    // Apply MonacoBinding
     new MonacoBinding(yText, editor.getModel(), new Set([editor]));
-  
-    // Observe changes in Yjs and apply them properly
-    yText.observe(() => {
-      if (editor) {
-        editor.setValue(yText.toString());
-      }
-    });
   };
-  
 
   useEffect(() => {
     const interval = setInterval(() => {
