@@ -13,7 +13,7 @@ function RoomSelection() {
 
   const joinRoom = () => {
     if (roomId.trim() !== "") {
-      navigate(`/room/${roomId}`);
+      navigate(/room/${roomId});
     } else {
       alert("Enter a valid Room ID!");
     }
