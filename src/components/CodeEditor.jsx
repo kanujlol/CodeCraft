@@ -48,8 +48,18 @@ function CodeEditor() {
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
     const yText = ydocRef.current.getText("monaco");
+  
+    // Apply MonacoBinding
     new MonacoBinding(yText, editor.getModel(), new Set([editor]));
+  
+    // Observe changes in Yjs and apply them properly
+    yText.observe(() => {
+      if (editor) {
+        editor.setValue(yText.toString());
+      }
+    });
   };
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
