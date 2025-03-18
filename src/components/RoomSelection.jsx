@@ -12,12 +12,13 @@ function RoomSelection() {
   };
 
   const joinRoom = () => {
+    console.log("Room ID before navigation:", roomId); // Debugging output
     if (roomId.trim() !== "") {
       navigate(`/room/${roomId}`);
     } else {
       alert("Enter a valid Room ID!");
     }
-  };
+  };  
 
   const copyRoomId = () => {
     navigator.clipboard.writeText(roomId);
