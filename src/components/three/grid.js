@@ -19,7 +19,7 @@ import { styles } from "../../styles";
 //import { SectionWrapper } from "../../hoc";
 import { textVariant } from "../../utils/motion";
 //import styles from './right.module.css';
-const App =() => {
+const Learn =() => {
     const [topic, setTopic] = useState("");
     const [result, setResult] = useState(null);
     const [linkclub,setLinkClub] = useState(null);
@@ -238,7 +238,7 @@ const App =() => {
         };
 
         console.log("REQUEST BODY :",JSON.stringify(apiRequestBody))
-        const response = await fetch("http://127.0.0.1:8000/askai/", {
+        const response = await fetch("http://127.0.0.1:8000/askAI/", {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -253,15 +253,14 @@ const App =() => {
         }
     
         const responseData = await response.json();
-        setResult(responseData.content);
-        console.log("result",responseData.content)
-
-  
+        setResult(responseData.response);
+        console.log("result",responseData.response)
+        localStorage.setItem("ai-prev-response",JSON.stringify(responseData.response))
     
 
         const key ="AIzaSyA_cxjTyiZMP1vU26kEsJkiKIPUHD-7QCg"
       
-        const yresponse = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${key}&part=snippet&maxResults=8&order=viewCount&q=${topic} in data structures and algorithms`)
+        const yresponse = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${key}&part=snippet&maxResults=8&order=viewCount&q=${maintopic} in data structures and algorithms`)
 
       if (!yresponse.ok) {
         throw new Error(`HTTP error! Status: ${yresponse.status}`);
@@ -302,7 +301,7 @@ const App =() => {
                 <Hero />
                <div className={styles1.bottomsection}>
                    <div className={styles1.messagebar}>
-                      <input
+                      <input 
                       type="text"
                        placeholder="What do you want to explore ..."
                        onChange={(e) => setTopic(e.target.value)}
@@ -426,4 +425,4 @@ const App =() => {
 </div></div>
 );
 };  
-export default App;
+export default Learn;

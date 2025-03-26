@@ -17,7 +17,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ContestDetailsPage from './Contests/Contestmain';
 import ChallengesPage from './Contests/challengelist';
-import Apply from './components/three/grid';
+import Learn from './components/three/grid';
 import Select from './Contests/contestselection';
 import Hostmain from './Contests/Hostmainpage';
 import Questions from './Contests/Questions';
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/learn",
-    element: <Apply />,
+    element: <Learn />,
   },
   {
     path: "/auth",

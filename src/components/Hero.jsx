@@ -18,7 +18,7 @@ const Hero = () => {
           <h1 className={`${styles.heroHeadText} text-white`}>
             Learn And <span className='text-[#F28C28]'> Explore </span>
           </h1>
-          <p className={`${styles.heroSubText} mt-2 text-white-100`}>
+          <p className={`${styles.heroSubText} mt-2 text-white`}>
             Dive into the world of <br className='sm:block hidden' />
            Computer Science And Technology
           </p>

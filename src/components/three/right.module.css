@@ -37,7 +37,6 @@
 .quer{
     display:flex;
     justify-content: space-between;
-    color: rgb(222,222,222,1);
     align-items:center;
     width:90%;
     background: transparent;
@@ -143,7 +142,7 @@
     border: none;
     outline: none;
     font-size: 20px;
-    color: var(--textcol);
+    color: white;
     width: 100%;
 }
 
