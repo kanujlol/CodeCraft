@@ -1,8 +1,8 @@
+
 import os
 import json
 import requests
 import google.generativeai as genai
-from .resources import format_resources
 from dotenv import load_dotenv
 
 dotenv_path = '.env'
@@ -112,7 +112,6 @@ def generate_hints(data):
         9. **Do NOT wrap the response in triple backticks** or code blocks. Just output the hints as plain text.
 
         ---
-        Ensure hints are **logical, structured, and actionable**. Do not rush to conclusions; think through the problem before responding.
 
         """
 
@@ -125,91 +124,3 @@ def generate_hints(data):
 
     except Exception as e:
         return {"error": f"Error occurred: {str(e)}"}
-
-
-# Function to handle AskAI request
-def ask_ai(data):
-    try:
-        topic = data.get("topic", "Linear Search")
-        profession = data.get("profession", "developer")
-        age = data.get("age", 25)
-        level = data.get("level", "beginner")
-        experience = data.get("experience", "0 years")
-        prev_response = data.get("prev_response", "")
-        language=data.get("prefered_language","cpp")
-        additional_resources = format_resources(topic) 
-       
-        
-        prompt = f"""
-        You are an advanced teaching assistant, skilled in simplifying complex computer science topics based on the user's profession, age, experience, and skill level.
-
-        ### Topic:
-        ```{topic}```
-
-        ### User Profile:
-        - **Profession:** ```{profession}```
-        - **Age:** ```{age}```
-        - **Skill Level:** ```{level}```
-        - **Experience:** ```{experience}```
-
-        ### Previous Response (if applicable):
-        ```{prev_response}```
-
-        ### Instructions:
-        1. **Ensure the topic is computer science-related.**  
-        - If the topic is unrelated or inappropriate, return a polite warning instead of an explanation.  
-
-        2. **Dynamically structure responses** based on the topic, rather than following a rigid format.  
-        - Use **the most suitable headings** while ensuring all key aspects are covered.  
-
-        3. **Provide a well-structured, in-depth explanation** that enhances clarity and depth, ensuring it is more informative than any previous response (if applicable), without explicitly referencing the comparison.
-
-        ### Expected Breakdown (Adapt Based on Topic):
-        - **Objective/Definition:** A precise definition and purpose of the topic.  
-        - **Intuition:** Explain the fundamental idea in an easy-to-understand manner.  
-        - **Best Approach:** Describe the most efficient method or commonly used technique.  
-        - **Code Implementation (if applicable):**  
-        - Provide clean, well-formatted code in ```{language}```.  
-        - **Step-by-Step Dry Run:** Walk through an example to demonstrate real-world application.  
-        - **Complexity Analysis:**  
-        - **Time Complexity:** Derive and explain influencing factors.  
-        - **Space Complexity:** Analyze memory usage and possible optimizations.  
-
-       
-
-        ### Response Format:
-        Ensure responses are well-structured, adaptive, and **not bound to a fixed sequence**, allowing flexibility in presentation while maintaining completeness.  
-        Avoid rushing into a response—work through the topic as a human expert would, ensuring clarity and completeness.
-        Also Dont mention any sentance explicity like "Okay, let's dive into Merge Sort. Given your background as a developer with 5 years of experience, I'll explain it with a focus on practical understanding and optimization."
-        just start with explanation
-       """
-        
-        model = genai.GenerativeModel("gemini-2.0-flash")
-
-        response = model.generate_content(prompt)
-        if hasattr(response, "text"):
-            response_text = response.text  # Extract the actual string response
-        else:
-            response_text = str(response)  # Fallback if response structure is different
-
-        full_response = f"{response_text}\n\n{additional_resources}"
-        return full_response
-    except Exception as e:
-        return {"error": f"Error occurred: {str(e)}"}
-    
-
-    #prompt engineering
-
-    #Principle 1: Write clear and specific instructions
-        # Tactic 1: Use delimiters to clearly indicate distinct parts of the input-used to avoid prompt injections
-        # Tactic 2: Use formatting to make the input more readable-Ask for a structured output
-        # Tactic 3: Ask the model to check whether conditions are satisfied
-        # Tactic 4: "Few-shot" prompting-give an example
-    
-    #Principle 2: Give the model time to “think”
-        # Tactic 1: Specify the steps required to complete a task
-        # Tactic 2: Instruct the model to work out its own solution before rushing to a conclusion
-    
-
-
-

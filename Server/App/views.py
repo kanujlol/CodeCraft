@@ -4,7 +4,7 @@ from .models import Question
 from .serializers import QuestionSerializer
 from rest_framework import viewsets
 from api.judge0_calls import get_languages, get_submission_token, check_submission_status,compile_code
-from api.gemini_api_calls import generate_hints, ask_ai
+from api.gemini_api_calls import ask_ai,generate_hints
 from django.contrib import admin
 
 
