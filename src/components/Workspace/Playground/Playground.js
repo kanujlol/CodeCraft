@@ -1,25 +1,18 @@
-import React, { useEffect,useRef } from 'react'
+import React, { useEffect} from 'react'
 import PreferenceNav from './PreferenceNav/PreferenceNav'
 import Split from 'react-split'
-import CodeMirror from '@uiw/react-codemirror'
-import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { cpp } from '@codemirror/lang-cpp';
 import EditorFooter from './EditorFooter';
 import { useState } from 'react';
 import { supabase } from '../../../supabase/supabase';
 import { toast } from "react-toastify";
 import useLocalStorage from '../../../Hooks/useLocalStorage';
-import * as Y from 'yjs';
-import { WebrtcProvider } from 'y-webrtc';
-import { MonacoBinding } from 'y-monaco';
+import CodeEditor from './CodeEditor';
+
 
 export default function Playground({problem, setSuccess}) {
   const { currentProblem, loading } = useGetCurrentProblem(problem.id);
   const [activeTestCaseId, setActiveTestCaseId] = useState(0);
-  const roomId = localStorage.getItem("roomId"); // Getting roomId from localStorage
-  const editorRef = useRef(null);
-  const ydocRef = useRef(null);
-  const providerRef = useRef(null);
   let [userCode, setUserCode] = useState("//Enter your code here");
   const [solved, setSolved] = useState([]);
   const [fontSize,setFontSize] = useLocalStorage("lcc-fontSize","16px");
@@ -28,6 +21,7 @@ export default function Playground({problem, setSuccess}) {
   const [askMessage,setAskMessage] = useState('Try the Ask AI feature');
   const [submitting,setSubmitting] = useState(false)
   const [asking,setAsking] = useState(false)
+  
 
   const [settings,setSettings] = useState({
     fontSize: fontSize,
@@ -35,54 +29,19 @@ export default function Playground({problem, setSuccess}) {
     dropdownIsOpen: false,
   })
 
-  // console.log(activeTestCaseId)
   useEffect(() => {
-    const ydoc = new Y.Doc();
-    const provider = new WebrtcProvider(roomId, ydoc, {
-      signaling: ["wss://y-webrtc.fly.dev"],
-    });
-
-    const yText = ydoc.getText("code");
-    providerRef.current = provider;
-    ydocRef.current = ydoc;
-
-    setTimeout(() => {
-      if (provider.awareness.states.size === 1) {
-        // First user - optionally load code from Firestore if necessary
-        const savedCode = localStorage.getItem(`code-${problem.id}`);
-        if (savedCode) {
-          yText.insert(0, savedCode);
-        }
+    const updateUserCode = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      const code = localStorage.getItem(`code-${problem.id}`);
+      if (user) {
+        setUserCode(code ? JSON.parse(code) : "//Enter your code here");
+      } else {
+        setUserCode("//Enter your code here");
       }
-    }, 2000);
-
-    provider.awareness.setLocalStateField("user", {
-      name: "User " + Math.floor(Math.random() * 100),
-    });
-
-    return () => {
-      provider.destroy();
-      ydoc.destroy();
     };
-  }, [roomId]);
-
-  const handleEditorDidMount = (editor) => {
-    editorRef.current = editor;
-    const yText = ydocRef.current.getText("code");
-    // Here, we'll bind the yjs CRDT with CodeMirror editor
-    editor.setValue(yText.toString());
-    yText.observe((event) => {
-      editor.setValue(yText.toString());
-    });
-
-    editor.on("change", () => {
-      const code = editor.getValue();
-      yText.delete(0, yText.length);  // Clear existing text
-      yText.insert(0, code);  // Insert the new code
-    });
-  };
-
-
+    updateUserCode();
+  }, [problem.id]);
+  
   const handleAskAI = async() =>{
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -258,10 +217,7 @@ export default function Playground({problem, setSuccess}) {
     updateUserCode() 
   },[problem.id,problem.starterCode])
 
-  const onChange = (value) =>{
-      setUserCode(value)
-      localStorage.setItem(`code-${problem.id}`,JSON.stringify(value))
-  }
+ 
 
   return (
     <>
@@ -269,14 +225,12 @@ export default function Playground({problem, setSuccess}) {
       <PreferenceNav settings={settings} setSettings={setSettings} />
       <Split className="h-[calc(100vh-94px)]" direction="vertical" sizes={[60, 40]} minSize={60}>
         <div className="w-full overflow-auto">
-        <CodeMirror
-            value={userCode}
-            theme={vscodeDark}
-            onChange={onChange}
-            extensions={[cpp()]}
-            style={{ fontSize: settings.fontSize }}
-            onEditorMount={handleEditorDidMount} // Bind editor here
-          />
+         {/* CodeMirror Editor */}
+         <CodeEditor
+        userCode={userCode}
+        setUserCode={setUserCode}
+        problem={problem}
+      />
         </div>
         <div className="w-full px-5 overflow-auto">
           {/* testcase heading */}

@@ -24,6 +24,8 @@
     "firebase": "^11.4.0",
     "flask": "^0.2.10",
     "framer-motion": "^11.0.6",
+    "loadash": "^1.0.0",
+    "lodash": "^4.17.21",
     "maath": "^0.10.7",
     "node": "^21.6.1",
     "puppeteer": "^21.10.0",
