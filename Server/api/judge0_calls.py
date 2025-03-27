@@ -4,8 +4,6 @@ from dotenv import load_dotenv
 import json
 import base64
 from django.http import JsonResponse
-from App.models import Question
-
 # Load environment variables
 dotenv_path = '.env'
 load_dotenv(dotenv_path)

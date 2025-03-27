@@ -1,7 +1,5 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Question
-from .serializers import QuestionSerializer
 from rest_framework import viewsets
 from api.judge0_calls import get_languages, get_submission_token, check_submission_status,compile_code
 from api.gemini_api_calls import ask_ai,generate_hints
@@ -35,13 +33,6 @@ class AskAIView(APIView):
 
 
 
-@admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('question_id', 'title', 'difficulty', 'topics', 'time_limit_per_test')
-    search_fields = ('title', 'topics', 'companies')
-
-
-# ViewSet for the Question model
-class QuestionViewSet(viewsets.ModelViewSet):
-    queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
+class HomePageView(APIView):
+    def get(self, request):
+        return Response({"message": "Success", "status": 200})
