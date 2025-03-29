@@ -192,6 +192,11 @@ function App() {
               : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
           }`} onClick={() => handleTypeFilter("Binary Search")}>Binary Search</span>
           <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedType === "String" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleTypeFilter("String")}>String</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
             selectedType === "Binary Tree" 
               ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
               : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
@@ -206,6 +211,11 @@ function App() {
               ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
               : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
           }`} onClick={() => handleTypeFilter("Sliding Window")}>Sliding Window</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedType === "Bit Manipulation" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleTypeFilter("Bit Manipulation")}>Bit Manipulation</span>
           <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
             selectedType === "Back Tracking" 
               ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 

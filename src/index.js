@@ -11,7 +11,6 @@ import ContestForm from './Contests/Contestdetails';
 import ContestProblemPage from './pages/contestproblems/[pid]';
 import AuthPage from './pages/auth/AuthPage';
 import ProblemPage from './pages/problems/[pid]';
-import SignUp from './pages/auth/SignUp';
 import { RecoilRoot } from 'recoil';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,6 +24,10 @@ import Questions from './Contests/Questions';
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <AuthPage />,
+  },
+  {
+    path: "/problems",
     element: <App />,
   },
   {
@@ -54,10 +57,6 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <AuthPage />,
-  },
-  {
-    path: "/auth/signup",
-    element: <SignUp />,
   },
   {
     path: "/contests/:contestId",
