@@ -150,21 +150,67 @@ function App() {
       </h1> */}
         <div className="flex gap-5 py-10 justify-evenly">
         {/* <div className=""> */}
-        <div className="md:w-56 flex flex-wrap justify-start h-64">
-          <span className={`filter-button ${!selectedDifficulty && !selectedType ? 'selected' : ''}`} onClick={() => resetFilters()}>All</span>
-          <span className={`filter-button ${selectedDifficulty === "Easy" ? 'selected' : ''}`} onClick={() => handleDifficultyFilter("Easy")}>Easy</span>
-          <span className={`filter-button ${selectedDifficulty === "Medium" ? 'selected' : ''}`} onClick={() => handleDifficultyFilter("Medium")}>Medium</span>
-          <span className={`filter-button ${selectedDifficulty === "Hard" ? 'selected' : ''}`} onClick={() => handleDifficultyFilter("Hard")}>Hard</span>
-          <span className={`filter-button ${selectedType === "Dynamic Programming" ? 'selected' : ''}`} onClick={() => handleTypeFilter("Dynamic Programming")}>Dynamic Programming</span>
-          <span className={`filter-button ${selectedType === "Two Pointers" ? 'selected' : ''}`} onClick={() => handleTypeFilter("Two Pointers")}>Two Pointers</span>
-          <span className={`filter-button ${selectedType === "Array" ? 'selected' : ''}`} onClick={() => handleTypeFilter("Array")}>Array</span>
-          <span className={`filter-button ${selectedType === "Linked List" ? 'selected' : ''}`} onClick={() => handleTypeFilter("Linked List")}>Linked List</span>
-          <span className={`filter-button ${selectedType === "Stack" ? 'selected' : ''}`} onClick={() => handleTypeFilter("Stack")}>Stack</span>
-          <span className={`filter-button ${selectedType === "Binary Search" ? 'selected' : ''}`} onClick={() => handleTypeFilter("Binary Search")}>Binary Search</span>
-          <span className={`filter-button ${selectedType === "Binary Tree" ? 'selected' : ''}`} onClick={() => handleTypeFilter("Binary Tree")}>Binary Tree</span>
-          <span className={`filter-button ${selectedType === "Intervals" ? 'selected' : ''}`} onClick={() => handleTypeFilter("Intervals")}>Intervals</span>
-          <span className={`filter-button ${selectedType === "Sliding Window" ? 'selected' : ''}`} onClick={() => handleTypeFilter("Sliding Window")}>Sliding Window</span>
-          <span className={`filter-button ${selectedType === "Back Tracking" ? 'selected' : ''}`} onClick={() => handleTypeFilter("Back Tracking")}>Back Tracking</span>
+        <div className="md:w-56 flex flex-wrap justify-start h-64 gap-3">
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            !selectedDifficulty && !selectedType 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => resetFilters()}>All</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedDifficulty === "Easy" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleDifficultyFilter("Easy")}>Easy</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedDifficulty === "Medium" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleDifficultyFilter("Medium")}>Medium</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedDifficulty === "Hard" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleDifficultyFilter("Hard")}>Hard</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedType === "Dynamic Programming" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleTypeFilter("Dynamic Programming")}>Dynamic Programming</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedType === "Two Pointers" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleTypeFilter("Two Pointers")}>Two Pointers</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedType === "Array" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleTypeFilter("Array")}>Array</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedType === "Binary Search" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleTypeFilter("Binary Search")}>Binary Search</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedType === "Binary Tree" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleTypeFilter("Binary Tree")}>Binary Tree</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedType === "Intervals" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleTypeFilter("Intervals")}>Intervals</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedType === "Sliding Window" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleTypeFilter("Sliding Window")}>Sliding Window</span>
+          <span className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all duration-300 ${
+            selectedType === "Back Tracking" 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+              : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+          }`} onClick={() => handleTypeFilter("Back Tracking")}>Back Tracking</span>
         </div>
         {/* </div> */}
         <div className="overflow-x-auto md:w-1/2 flex flex-col">
@@ -175,27 +221,9 @@ function App() {
               ))}
             </div>
           )}
-          <table className="text-sm text-left text-gray-500 dark:text-gray-400 w-full max-w-[1200px] mx-auto">
-            {!loadingProblems && (
-              <thead className="text-xs text-gray-500 uppercase dark:text-gray-400 border-b ">
-                <tr>
-                  <th scope="col" className="px-1 py-3 w-0 font-medium">
-                    Status
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-0 font-medium">
-                    Title
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-0 font-medium">
-                    Difficulty
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-0 font-medium">
-                    Category
-                  </th>
-                </tr>
-              </thead>
-            )}
+          <div className="w-full max-w-[1200px] mx-auto">
             <ProblemsTable filteredProblems={filteredProblems} />
-          </table>
+          </div>
         </div>
         </div>
     </main>

@@ -126,11 +126,10 @@ code {
 	fill: white;
   }
   .violet-gradient {
-	background: #F28C28;
-	background: linear-gradient(-90deg, #F28C28 0%, rgba(60, 51, 80, 0) 100%);
+	background: linear-gradient(-90deg, rgb(147 51 234) 0%, rgba(60, 51, 80, 0) 100%);
 	background: -webkit-linear-gradient(
 	  -90deg,
-	  #F28C28 0%,
+	  rgb(147 51 234) 0%,
 	  rgba(60, 51, 80, 0) 100%
 	);
   }

@@ -1,51 +1,76 @@
 import React, { useEffect, useState } from 'react'
-import { BsCheckCircle } from 'react-icons/bs'
 import { AiFillYoutube } from 'react-icons/ai'
+import { BsCheckCircle } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../supabase/supabase'
 
 export default function ProblemsTable({filteredProblems}) {
     const solvedProblems = useGetSolvedProblems();
-    console.log(solvedProblems)
+    
     return (
-        <>
-            <tbody className="text-white">
-                {filteredProblems.map((problem, idx) => {
-                    const difficultyColor =
-                        problem.difficulty === "Easy"
-                            ? "text-dark-green-s"
-                            : problem.difficulty === "Medium"
-                                ? "text-dark-yellow"
-                                : "text-dark-pink";
-                    return (
-                        <tr className={`${idx % 2 === 1 ? "bg-dark-layer-1" : ""}`} key={problem.id}>
-                            <th className="px-2 py-4 font-medium whitespace-nowrap text-dark-green-s">
-                                {solvedProblems && solvedProblems.includes(problem.id) && <BsCheckCircle fontSize={"18"} width="18" />}
-                            </th>
-                            <td className="px-6 py-4">
-                                <Link to={`/problems/${problem.id}`} className="hover:text-blue-600 cursor-pointer">
-                                    {problem.title}
-                                </Link>
-                            </td>
-                            <td className={`px-6 py-4 ${difficultyColor}`}>
-                                {problem.difficulty}
-                            </td>
-                            <td className={"px-6 py-4"}>
-                                {problem.category}
-                            </td>
-                            {/* <td className={"px-6 py-4"}>
-                                {problem.videoId ? (
-                                    <AiFillYoutube fontSize={"28"}
-                                    className="cursor-pointer hover:text-red-600"/>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+            {filteredProblems.map((problem) => {
+                const difficultyColor =
+                    problem.difficulty === "Easy"
+                        ? "from-dark-green-s/20 to-dark-green-s/5"
+                        : problem.difficulty === "Medium"
+                            ? "from-dark-yellow/20 to-dark-yellow/5"
+                            : "from-dark-pink/20 to-dark-pink/5";
+                const isSolved = solvedProblems && solvedProblems.includes(problem.id);
+                
+                return (
+                    <div 
+                        key={problem.id}
+                        className={`bg-gradient-to-br ${difficultyColor} rounded-xl p-4 hover:shadow-xl transition-all duration-300 border border-dark-divider-border-2 hover:border-opacity-50 hover:scale-[1.02]`}
+                    >
+                        <div className="mb-3 flex items-center gap-2">
+                            <div className="w-5 h-5 flex items-center justify-center">
+                                {isSolved ? (
+                                    <BsCheckCircle className="text-dark-green-s" fontSize={"18"} />
                                 ) : (
-                                    <p className="text-gray-400">Coming soon</p>
+                                    <div className="w-3 h-3 border border-dark-gray-6 rounded-full"></div>
                                 )}
-                            </td> */}
-                        </tr>
-                    );
-                })}
-            </tbody>
-        </>
+                            </div>
+                            <Link 
+                                to={`/problems/${problem.id}`} 
+                                className="block text-white hover:text-brand-orange transition-colors duration-200 font-medium text-base"
+                            >
+                                {problem.title}
+                            </Link>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${
+                                problem.difficulty === "Easy"
+                                    ? "bg-dark-green-s/30 text-dark-green-s border border-dark-green-s/30"
+                                    : problem.difficulty === "Medium"
+                                        ? "bg-dark-yellow/30 text-dark-yellow border border-dark-yellow/30"
+                                        : "bg-dark-pink/30 text-dark-pink border border-dark-pink/30"
+                            }`}>
+                                {problem.difficulty}
+                            </span>
+                            <span className="text-sm text-white bg-dark-fill-3/70 px-3 py-1.5 rounded-full border border-dark-divider-border-2">
+                                {problem.category}
+                            </span>
+                            {problem.videoId ? (
+                                <a 
+                                    href={`https://youtube.com/watch?v=${problem.videoId}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center space-x-2 text-white hover:text-red-500 transition-colors duration-200 bg-dark-fill-3/70 px-3 py-1.5 rounded-full border border-dark-divider-border-2 hover:bg-dark-fill-3/90"
+                                >
+                                    <AiFillYoutube fontSize={"18"} />
+                                    <span className="text-sm font-medium">Solution</span>
+                                </a>
+                            ) : (
+                                <span className="text-sm text-dark-gray-6 bg-dark-fill-3/70 px-3 py-1.5 rounded-full border border-dark-divider-border-2">
+                                    Coming soon
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
     )
 }
 
@@ -84,19 +109,24 @@ function useGetSolvedProblems() {
   
     useEffect(() => {
       const getSolvedProblems = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
-      //console.log(user);
-        if (user) {
-          console.log(user.id)
-            const { data,error } = await supabase
-            .from('users')
-            .select('solvedProblems')
-            .eq('email',user.email)
-            console.log(data);
-             console.log(data[0]);
-            setSolvedProblems(data[0].solvedProblems)
-        }
-        else{
+        try {
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user) {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('solvedProblems')
+                    .eq('email', user.email)
+                
+                if (error) {
+                    console.error('Error fetching solved problems:', error);
+                } else if (data && data.length > 0) {
+                    setSolvedProblems(data[0].solvedProblems || [])
+                }
+            } else {
+                setSolvedProblems([])
+            }
+        } catch (error) {
+            console.error('Error in getSolvedProblems:', error);
             setSolvedProblems([])
         }
       };
@@ -104,4 +134,4 @@ function useGetSolvedProblems() {
     }, []);
   
     return solvedProblems;
-  }
+}
