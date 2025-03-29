@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import AuthModal from '../../components/Modals/AuthModal';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authModalState } from '../../atoms/authModalAtom';
 import { supabase } from '../../supabase/supabase';
 import { useNavigate } from 'react-router-dom';
@@ -10,24 +10,20 @@ import { motion } from 'framer-motion';
 export default function AuthPage() {
   const navigate = useNavigate();
   const authModal = useRecoilValue(authModalState);
+  const setAuthModalState = useSetRecoilState(authModalState);
   const [user, setUser] = useState(null);
   const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
     const getUserSession = async () => {
-      // Get the current user's session
-      const { data, error } = await supabase.auth.getSession();
+      const { data: { session }, error } = await supabase.auth.getSession();
 
       if (error) {
         console.error('Error fetching user session:', error.message);
         return null;
       }
 
-      // Access user information from the session
-      const currentUser = data?.session;
-      console.log('User:', currentUser);
-
-      return currentUser;
+      return session?.user;
     };
 
     const fetchData = async () => {
@@ -36,7 +32,7 @@ export default function AuthPage() {
       setPageLoading(false);
 
       if (userData) {
-        navigate('/');
+        navigate('/problems');
       }
     };
 
@@ -67,14 +63,23 @@ export default function AuthPage() {
               Practice coding problems, participate in contests, and improve your skills with our interactive platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              {!user ? (
+                <button
+                  onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true }))}
+                  className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  Get Started
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate('/problems')}
+                  className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  Continue Learning
+                </button>
+              )}
               <button
-                onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true }))}
-                className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Get Started
-              </button>
-              <button
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/problems')}
                 className="px-8 py-3 bg-white/10 text-white rounded-lg font-semibold hover:bg-white/20 transition-all duration-300 backdrop-blur-sm"
               >
                 View Problems

@@ -12,7 +12,6 @@ import { useParams } from 'react-router-dom';
 import { problems } from '../../utils/problems/index'
 import { useNavigate } from 'react-router-dom';
 
-
 export default function Topbar({ problemPage }) {
     const [user, setUser] = useState(null);
     const setAuthModalState = useSetRecoilState(authModalState);
@@ -46,29 +45,39 @@ export default function Topbar({ problemPage }) {
 
     useEffect(() => {
         const getUserSession = async () => {
-            // Get the current user's session
-            const { data, error } = await supabase.auth.getSession();
+            const { data: { session }, error } = await supabase.auth.getSession();
 
             if (error) {
                 console.error('Error fetching user session:', error.message);
                 return null;
             }
 
-            // Access user information from the session
-            const currentUser = data?.session?.user;
-            // console.log('User:', currentUser);
-
-            setUser(currentUser);
+            setUser(session?.user);
         };
 
         getUserSession();
-        // console.log(user)
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user);
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
+
+    const handleLogoClick = (e) => {
+        e.preventDefault();
+        if (user) {
+            navigate('/problems');
+        } else {
+            navigate('/');
+        }
+    };
+
     return (
         <div>
             <nav className="relative flex h-[50px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
                 <div className={`flex w-full items-center justify-between ${!problemPage ? "max-w-[1200px] mx-auto" : ""}`}>
-                    <Link to="/" className="h-[22px] flex-1">
+                    <Link to={user ? "/problems" : "/"} className="h-[22px] flex-1" onClick={handleLogoClick}>
                         <img src="/logo-full.png" alt="Logo" height={100} width={100} />
                     </Link>
 
@@ -81,7 +90,7 @@ export default function Topbar({ problemPage }) {
                                 <FaChevronLeft />
                             </div>
                             <Link
-                                to="/"
+                                to="/problems"
                                 className="flex items-center gap-2 font-medium max-w-[170px] text-white hover:text-purple-400 cursor-pointer transition-colors duration-200"
                             >
                                 <div>
