@@ -75,10 +75,10 @@ export default function Topbar({ problemPage }) {
 
     return (
         <div>
-            <nav className="relative flex h-[50px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
+            <nav className="relative flex h-[70px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
                 <div className={`flex w-full items-center justify-between ${!problemPage ? "max-w-[1200px] mx-auto" : ""}`}>
-                    <Link to={user ? "/problems" : "/"} className="h-[22px] flex-1" onClick={handleLogoClick}>
-                        <img src="/logo-full.png" alt="Logo" height={100} width={100} />
+                    <Link to={user ? "/problems" : "/"} className="h-[70px] flex items-center" onClick={handleLogoClick}>
+                        <img src="/CClogo_big.png" alt="Logo" className="h-[65px] w-auto object-contain" />
                     </Link>
 
                     {problemPage && (

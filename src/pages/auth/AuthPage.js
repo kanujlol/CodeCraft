@@ -60,7 +60,7 @@ export default function AuthPage() {
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-300 mb-8">
-              Practice coding problems, participate in contests, and improve your skills with our interactive platform.
+              Practice coding problems, collaborate with peers, and improve your skills with our interactive platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               {!user ? (

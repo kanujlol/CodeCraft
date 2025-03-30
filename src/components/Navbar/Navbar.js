@@ -53,7 +53,7 @@ export default function Navbar() {
   return (
     <div className="flex items-center justify-between py-4">
       <Link to="/" className="flex items-center">
-        <img src="/logo.png" alt="CodeCraft" className="h-12 w-auto" />
+        <img src="/CClogo_big.png" alt="CodeCraft" className="h-24 w-24" />
       </Link>
       <div className="flex items-center space-x-4">
         <button
