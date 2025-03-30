@@ -9,31 +9,59 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { BsList } from 'react-icons/bs';
 import Timer from '../Timer/Timer';
 import { useParams } from 'react-router-dom';
-import { problems } from '../../utils/problems/index'
 import { useNavigate } from 'react-router-dom';
 
 export default function Topbar({ problemPage }) {
     const [user, setUser] = useState(null);
+    const [currentProblem, setCurrentProblem] = useState(null);
     const setAuthModalState = useSetRecoilState(authModalState);
     let { pid } = useParams();
-    const navigate = useNavigate() 
+    const navigate = useNavigate();
 
-    const handleProblemChange = (isForward)=>{
-        const order = problems[pid].order
-        const direction = isForward? 1 : -1
-        const nextProblemOrder = order + direction
-        const nextProblemKey = Object.keys(problems).find((key)=> problems[key].order === nextProblemOrder)
+    useEffect(() => {
+        const fetchCurrentProblem = async () => {
+            if (pid) {
+                const { data, error } = await supabase
+                    .from('Problems')
+                    .select('order')
+                    .eq('id', pid)
+                    .single();
+                
+                if (data) {
+                    setCurrentProblem(data);
+                }
+            }
+        };
+        fetchCurrentProblem();
+    }, [pid]);
+
+    const handleProblemChange = async (isForward) => {
+        if (!currentProblem) return;
         
-        if (isForward && !nextProblemKey) {
-            const firstProblemKey = Object.keys(problems).find((key) => problems[key].order === 1);
-            navigate(`/problems/${firstProblemKey}`);
-          } else if (!isForward && !nextProblemKey) {
-            const lastProblemKey = Object.keys(problems).find((key) => problems[key].order === Object.keys(problems).length);
-            navigate(`/problems/${lastProblemKey}`);
-          } else {
-            navigate(`/problems/${nextProblemKey}`);
-          }
-    }
+        const direction = isForward ? 1 : -1;
+        const nextProblemOrder = currentProblem.order + direction;
+        
+        const { data: nextProblem } = await supabase
+            .from('Problems')
+            .select('id')
+            .eq('order', nextProblemOrder)
+            .single();
+
+        if (nextProblem) {
+            navigate(`/problems/${nextProblem.id}`);
+        } else {
+            // If no next problem, wrap around
+            const { data: firstProblem } = await supabase
+                .from('Problems')
+                .select('id')
+                .eq('order', isForward ? 1 : currentProblem.order)
+                .single();
+            
+            if (firstProblem) {
+                navigate(`/problems/${firstProblem.id}`);
+            }
+        }
+    };
 
     const openLoginModal = useCallback(() => {
         setAuthModalState((prev) => ({
@@ -75,17 +103,17 @@ export default function Topbar({ problemPage }) {
 
     return (
         <div>
-            <nav className="relative flex h-[70px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
+            <nav className={`relative flex w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7 ${problemPage ? 'h-[50px]' : 'h-[70px]'}`}>
                 <div className={`flex w-full items-center justify-between ${!problemPage ? "max-w-[1200px] mx-auto" : ""}`}>
-                    <Link to={user ? "/problems" : "/"} className="h-[70px] flex items-center" onClick={handleLogoClick}>
-                        <img src="/CClogo_big.png" alt="Logo" className="h-[65px] w-auto object-contain" />
+                    <Link to={user ? "/problems" : "/"} className={`flex items-center ${problemPage ? 'h-[50px]' : 'h-[70px]'}`} onClick={handleLogoClick}>
+                        <img src="/CClogo_big.png" alt="Logo" className={`${problemPage ? 'h-[45px]' : 'h-[65px]'} w-auto object-contain`} />
                     </Link>
 
                     {problemPage && (
                         <div className="flex items-center gap-4 flex-1 justify-center">
                             <div
                                 className="flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer text-white hover:text-purple-400 transition-colors duration-200"
-                              onClick={() => handleProblemChange(false)}
+                                onClick={() => handleProblemChange(false)}
                             >
                                 <FaChevronLeft />
                             </div>
@@ -100,7 +128,7 @@ export default function Topbar({ problemPage }) {
                             </Link>
                             <div
                                 className="flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer text-white hover:text-purple-400 transition-colors duration-200"
-                              onClick={() => handleProblemChange(true)}
+                                onClick={() => handleProblemChange(true)}
                             >
                                 <FaChevronRight />
                             </div>
@@ -109,7 +137,7 @@ export default function Topbar({ problemPage }) {
 
                     <div className="flex items-center space-x-4 flex-1 justify-end space-between">
                         <div className='space-x-4'>
-                        <Link
+                            <Link
                                 to="/learn"
                                 className="bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 hover:from-purple-500 hover:to-pink-500 transition-all duration-300">
                                 Learn
@@ -144,5 +172,5 @@ export default function Topbar({ problemPage }) {
                 </div>
             </nav>
         </div>
-    )
+    );
 }

@@ -103,6 +103,23 @@ export default function ProblemDescription({ problem }) {
 	const { userData, setUserData, userDoc } = useGetUsersDataOnProblem(problem.id);
 	const [updating, setUpdating] = useState(false)
 	
+	useEffect(() => {
+		// Set title when component mounts
+		document.title = 'CodeCraft';
+		
+		// Handle visibility change (when returning from YouTube)
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === 'visible') {
+				document.title = 'CodeCraft';
+			}
+		};
+
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+
+		return () => {
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
+		};
+	}, []);
 
 	const handleLike = async()=>{
 		const { data: { user } } = await supabase.auth.getUser()
@@ -416,31 +433,44 @@ function useGetCurrentProblem(problemId){
 	const [problemDifficultyClass, setProblemDifficultyClass] = useState("");
 
 	useEffect(()=>{
-		//fetch data from db
-		const getCurrentProblem =async ()=>{
-			setLoading(true)
-			const { data, error } = await supabase
-			.from('Problems')
-			.select()
-			.eq('id',problemId)
-			// console.log(data[0])
-			if(data !== 'undefined')
-			{
-				setCurrentProblem(data[0])
-				// easy, medium, hard
-				setProblemDifficultyClass(
-					data[0].difficulty === "Easy"
-					  ? "bg-olive text-olive"
-					  : data[0].difficulty === "Medium"
-					  ? "bg-dark-yellow text-dark-yellow"
-					  : " bg-dark-pink text-dark-pink"
-				  );
+		const getCurrentProblem = async () => {
+			setLoading(true);
+			try {
+				const { data, error } = await supabase
+					.from('Problems')
+					.select()
+					.eq('id', problemId)
+					.single();
+
+				if (error) {
+					console.error('Error fetching problem:', error);
+					setLoading(false);
+					return;
+				}
+
+				if (data) {
+					setCurrentProblem(data);
+					setProblemDifficultyClass(
+						data.difficulty === "Easy"
+							? "bg-olive text-olive"
+							: data.difficulty === "Medium"
+							? "bg-dark-yellow text-dark-yellow"
+							: "bg-dark-pink text-dark-pink"
+					);
+				}
+			} catch (error) {
+				console.error('Error in getCurrentProblem:', error);
+			} finally {
+				setLoading(false);
 			}
-			setLoading(false)
+		};
+
+		if (problemId) {
+			getCurrentProblem();
 		}
-		getCurrentProblem()
-	},[problemId])
-	return { currentProblem, loading, problemDifficultyClass, setCurrentProblem};
+	}, [problemId]);
+
+	return { currentProblem, loading, problemDifficultyClass, setCurrentProblem };
 }
 
 function useGetUsersDataOnProblem(problemId){

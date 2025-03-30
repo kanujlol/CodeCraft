@@ -121,7 +121,7 @@ function App() {
             <ProblemsTable filteredProblems={filteredProblems} />
           </div>
         </div>
-      </div>
+        </div>
     </main>
   );
 }

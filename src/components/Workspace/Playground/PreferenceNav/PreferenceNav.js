@@ -147,7 +147,7 @@ const registerPeerConnectionListeners = (pc) => {
 		setvideoId(roomRef.id);
 		setIsCaller(true);
 		console.log(`Room created with ID: ${roomRef.id}`);
-		document.title = `Room: ${roomRef.id} (Caller)`;
+		document.title = `CodeCraft - Room: ${roomRef.id} (Caller)`;
 	
 		// Listen for remote answer
 		onSnapshot(roomRef, async (snapshot) => {
@@ -237,7 +237,7 @@ const registerPeerConnectionListeners = (pc) => {
 			}
 		  });
 		});
-		document.title = `Room: ${videoId} (Callee)`;
+		document.title = `CodeCraft - Room: ${videoId} (Callee)`;
 	  };
 	  const hangUp = async () => {
 		if (localStream && localStream.getTracks) {
@@ -266,7 +266,7 @@ const registerPeerConnectionListeners = (pc) => {
 		setvideoId('');
 		setLocalStream(null);
 		setRemoteStream(null);
-		document.title = 'Codecraft LiveConnect';
+		document.title = 'CodeCraft - LiveConnect';
 	  };
 	  
 	  

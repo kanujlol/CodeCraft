@@ -104,7 +104,7 @@ const WebRTCComponent = () => {
     setRoomId(roomRef.id);
     setIsCaller(true);
     console.log(`Room created with ID: ${roomRef.id}`);
-    document.title = `Room: ${roomRef.id} (Caller)`;
+    document.title = `CodeCraft - Room: ${roomRef.id} (Caller)`;
 
     // Listen for remote answer
     onSnapshot(roomRef, async (snapshot) => {
@@ -194,7 +194,7 @@ const WebRTCComponent = () => {
         }
       });
     });
-    document.title = `Room: ${joinRoomId} (Callee)`;
+    document.title = `CodeCraft - Room: ${joinRoomId} (Callee)`;
   };
   const hangUp = async () => {
     if (localStream && localStream.getTracks) {
@@ -223,7 +223,7 @@ const WebRTCComponent = () => {
     setRoomId('');
     setLocalStream(null);
     setRemoteStream(null);
-    document.title = 'Codecraft LiveConnect';
+    document.title = 'CodeCraft - LiveConnect';
   };
   
   
