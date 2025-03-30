@@ -106,7 +106,7 @@ export default function Topbar({ problemPage }) {
             <nav className={`relative flex w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7 ${problemPage ? 'h-[50px]' : 'h-[70px]'}`}>
                 <div className={`flex w-full items-center justify-between ${!problemPage ? "max-w-[1200px] mx-auto" : ""}`}>
                     <Link to={user ? "/problems" : "/"} className={`flex items-center ${problemPage ? 'h-[50px]' : 'h-[70px]'}`} onClick={handleLogoClick}>
-                        <img src="/CClogo_big.png" alt="Logo" className={`${problemPage ? 'h-[45px]' : 'h-[65px]'} w-auto object-contain`} />
+                        <img src="/logonew-removebg.png" alt="Logo" className={`${problemPage ? 'h-[45px]' : 'h-[80px]'} w-auto object-contain`} />
                     </Link>
 
                     {problemPage && (
@@ -121,8 +121,9 @@ export default function Topbar({ problemPage }) {
                                 to="/problems"
                                 className="flex items-center gap-2 font-medium max-w-[170px] text-white hover:text-purple-400 cursor-pointer transition-colors duration-200"
                             >
-                                <div>
+                                <div className="flex items-center gap-2">
                                     <BsList />
+                                    <img src="/Previewcon-removebg-preview.png" alt="Preview" className="h-5 w-5" />
                                 </div>
                                 <p>Problem List</p>
                             </Link>

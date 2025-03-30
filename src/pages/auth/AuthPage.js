@@ -45,21 +45,21 @@ export default function AuthPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Navbar />
-        <div className="flex flex-col lg:flex-row items-center justify-between min-h-[calc(100vh-5rem)] py-12">
+        <div className="flex flex-col lg:flex-row items-center justify-between min-h-[calc(100vh-5rem)] -mt-8">
           {/* Left side - Hero content */}
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0"
+            className="lg:w-1/2 text-center lg:text-left mb-8 lg:mb-0 -mt-12"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
               Master Coding with
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
-                {" "}CodeCraft
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 block">
+                CodeCraft
               </span>
             </h1>
-            <p className="text-lg sm:text-xl text-gray-300 mb-8">
+            <p className="text-lg sm:text-xl text-gray-300 mb-6 max-w-lg">
               Practice coding problems, collaborate with peers, and improve your skills with our interactive platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -98,7 +98,7 @@ export default function AuthPage() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:w-1/2 relative"
+            className="lg:w-1/2 relative -mt-4"
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl"></div>

@@ -53,9 +53,9 @@ export default function Navbar() {
   return (
     <div className="flex items-center justify-between py-4">
       <Link to="/" className="flex items-center">
-        <img src="/CClogo_big.png" alt="CodeCraft" className="h-24 w-24" />
+        <img src="/logonew-removebg.png" alt="CodeCraft" className="h-28 w-28" />
       </Link>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center justify-center flex-1 space-x-16 ml-[30rem]">
         <button
           className="px-6 py-2 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-all duration-300 backdrop-blur-sm"
           onClick={() => navigate('/problems')}
