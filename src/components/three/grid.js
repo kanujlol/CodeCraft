@@ -26,6 +26,7 @@ const Learn =() => {
     const [isLoading, setIsLoading] = useState(false);
     const [utopics, setUTopics] = useState(null);
     const [videolink,setVideoLink]=useState(""); 
+    const [videos, setVideos] = useState([]);
     const resultRef = useRef(null);
     const [userDetails, setUserDetails] = useState({
       profession: "",
@@ -229,10 +230,10 @@ const Learn =() => {
     
         const apiRequestBody = {
           "topic": maintopic,
-          "profession": userDetails.profession,
-          "age": userDetails.age,
-          "level": userDetails.level,
-          "experience": userDetails.experience,
+          "profession": data[0].profession,
+          "age": data[0].age,
+          "level": data[0].level,
+          "experience": data[0].experience,
           "prev_response": JSON.parse(localStorage.getItem("ai-prev-response"))
          
         };
@@ -253,7 +254,9 @@ const Learn =() => {
         }
     
         const responseData = await response.json();
-        setResult(responseData.response);
+        setResult(responseData.content);
+        setLinkClub(responseData.resource_links);
+        setVideos(responseData.yt_links);
         console.log("result",responseData.response)
         localStorage.setItem("ai-prev-response",JSON.stringify(responseData.response))
     
@@ -281,21 +284,7 @@ const Learn =() => {
           <div>
             <Topbar/>
             <div className={styles1.main}>
-              <div className ={styles1.sidebar}>
-                  <div className ={styles1.upperSide}>
-                <button className={styles1.midBtn}>History</button>
-                {allTopics && allTopics.map((item, index) => (
-    <div key={index}>
-        <button className={styles1.quer}>
-            <img className={styles1.image1} onClick={() => handleTopicButtonClick(item)} src={msgIcon} alt="query" />
-            {item}
-            <img className={styles1.image2} src={Del}  alt="query" />
-        </button>
-    </div>
-))}
-
-                </div>
-            </div>
+           
 
             <div className = {styles1.right}>
                 <Hero />
@@ -383,7 +372,6 @@ const Learn =() => {
           isLoading={isLoading}
         />
       ))}
-     
   </VerticalTimeline>
 )}
             </div>

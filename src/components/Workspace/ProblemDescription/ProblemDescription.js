@@ -94,6 +94,7 @@ import { TiStarOutline } from "react-icons/ti";
 import { supabase } from '../../../supabase/supabase';
 import CircleSkeleton from '../../Skeletons/CircleSkeleton';
 import RectangleSkeleton from '../../Skeletons/RectangleSkeleton';
+import VideoRoom from '../Playground/VideoRoom';
 import { toast } from "react-toastify";
 
 
@@ -102,8 +103,8 @@ export default function ProblemDescription({ problem }) {
 	const { currentProblem, loading, problemDifficultyClass, setCurrentProblem} = useGetCurrentProblem(problem.id);
 	const { userData, setUserData, userDoc } = useGetUsersDataOnProblem(problem.id);
 	const [updating, setUpdating] = useState(false)
+	const videoId = localStorage.getItem("videoId")
 	
-
 	const handleLike = async()=>{
 		const { data: { user } } = await supabase.auth.getUser()
 		// console.log(user.id)
@@ -310,7 +311,13 @@ export default function ProblemDescription({ problem }) {
 					Description
 				</div>
 			</div>
-
+            {
+				videoId && (
+					<div>
+						<VideoRoom />
+					</div>
+				)
+			}
 			<div className='flex px-0 py-4 h-[calc(100vh-94px)] overflow-y-auto'>
 				<div className='px-5'>
 					{/* Problem heading */}
