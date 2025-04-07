@@ -12,7 +12,7 @@ YOUTUBE_API_KEY=os.getenv("YOUTUBE_API_KEY")
 gemini_api_key = os.getenv("gemini_api_key")
 
 # Function to perform Google Search with SafeSearch enabled
-def google_search(query,num_results=2):
+def google_search(query,num_results=6):
     url="https://www.googleapis.com/customsearch/v1"
     params={
         "key":API_KEY,
@@ -32,7 +32,7 @@ def google_search(query,num_results=2):
         return []
 
 # Function to fetch YouTube videos with SafeSearch enabled
-def fetch_youtube_videos(topic,max_results=2):
+def fetch_youtube_videos(topic,max_results=6):
     if not YOUTUBE_API_KEY:
         return {"error":"YouTube API key is missing"}
     
@@ -64,30 +64,15 @@ def fetch_youtube_videos(topic,max_results=2):
 def fetch_resources(topic):
     queries=[f"{topic} best blogs",topic]
     return {
-        "blogs":google_search(queries[0])[:2],
-        "websites":google_search(queries[1])[:2],
-        "videos":fetch_youtube_videos(topic,2)
+        "blogs":google_search(queries[0])[:6],
+        "websites":google_search(queries[1])[:6],
+        "videos":fetch_youtube_videos(topic,6)
     }
 
-# Function to format resources for display
 def format_resources(topic):
     resources=fetch_resources(topic)
-
-    formatted=f"\n### Additional Learning Resources for {topic}:\n"
-    
-    if not any(resources.values()):
-        return formatted+"\nNo resources found. Try refining your search."
-
-    formatted+="\n#### 🔗 Best Blogs:\n"
-    formatted+="\n".join([f"  - [{r['title']}]({r['link']})" for r in resources["blogs"]]) or "  - No blogs found."
-
-    formatted+="\n\n#### 🌍 Best Websites:\n"
-    formatted+="\n".join([f"  - [{r['title']}]({r['link']})" for r in resources["websites"]]) or "  - No websites found."
-
-    formatted+="\n\n#### ▶️ YouTube Videos:\n"
-    formatted+="\n".join([f"  - [{r['title']}]({r['url']})" for r in resources["videos"]]) or "  - No videos found."
-
-    return formatted.strip()
-
-additional_resources = format_resources('binary search') 
-print(additional_resources)
+    return {
+        "blogs":[{"title":r["title"],"link":r["link"]} for r in resources["blogs"]],
+        "websites":[{"title":r["title"],"link":r["link"]} for r in resources["websites"]],
+        "videos":[{"title":r["title"],"url":r["url"]} for r in resources["videos"]]
+    }
