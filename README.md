@@ -29,13 +29,7 @@ An AI-powered collaborative coding platform that helps users solve coding challe
 ### Landing Page
 
 - Displays a list of coding problems with filtering options.
-- Features a leaderboard to showcase top users.
 
-### Chat Page
-
-- Real-time chat using Supabase.
-- User authentication and message history.
-- Messages synced via channel subscription.
 
 ### Problem Page
 
