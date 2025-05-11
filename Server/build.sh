@@ -6,7 +6,6 @@ set -o errexit
 
 pip install -r requirements.txt
 
-cd Server
 python manage.py makemigrations
 python manage.py migrate
 
