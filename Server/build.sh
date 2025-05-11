@@ -4,7 +4,7 @@ set -o errexit
 
 # Exit immediately on any error
 
-pip install -r Server/requirements.txt
+pip install -r requirements.txt
 
 cd Server
 python manage.py makemigrations
