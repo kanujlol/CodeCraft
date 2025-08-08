@@ -14,7 +14,7 @@ An AI-powered collaborative coding platform that helps users solve coding challe
 ### Collaboration Features
 
 1. **Create/Join a Room:** Start a session and invite collaborators or join a session.
-2. **Live Video Chat:** Enable camera & mic for real time discussions.
+2. **Live Video call:** Enable camera & mic for real time discussions.
 3. **Collaborative Coding:** Edit code together with real time sync.
 
 ### Learning Hub
@@ -57,7 +57,7 @@ An AI-powered collaborative coding platform that helps users solve coding challe
 
 ### **Collaboration Tools**
 
-- **Yjs** (CRDT Library for code collaboration)
+- **Yjs** (For code collaboration)
 - **WebRTC** (Video & Audio Communication)
 
 ### **Backend & Services**
@@ -95,7 +95,7 @@ WebRTC (Web Real-Time Communication) enables real-time audio, video, and data sh
 For more details, refer to this [WebRTC docs](https://webrtc.org/getting-started/overview) or [WebRTC Blog](https://medium.com/@fengliu_367/getting-started-with-webrtc-a-practical-guide-with-example-code-b0f60efdd0a7).
 
 ## CRDT 
-CRDTs Conflict-free Replicated Data Types) are a class of data structures that allow for concurrent, distributed updates to a shared dataset without conflicts.
+CRDTs (Conflict-free Replicated Data Types) are a class of data structures that allow for concurrent, distributed updates to a shared dataset without conflicts.
 
 Yjs allows multiple users can concurrently edit without requiring a central server to merge the changes.
 #### CRDT Flow
