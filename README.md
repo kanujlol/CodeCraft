@@ -334,13 +334,13 @@ CodeCraft/
 └── README.md
 ```
 
-## Deployment
+<!-- ## Deployment
 
 ### Frontend Deployment
 The frontend is deployed on *netlify* :
 
 ### Backend Deployment
-The Django backend is deployed on *render* 
+The Django backend is deployed on *render*  -->
 
 ### Future Enhancements
 
