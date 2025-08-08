@@ -2,7 +2,7 @@
 
 An AI-powered collaborative coding platform that helps users solve coding challenges smarter with real-time collaboration features, AI-generated hints, and an interactive learning hub.
 
-[CodeCraft Platform]
+
 ## User Guide
 
 ### Problem-Solving Workflow
