@@ -325,7 +325,6 @@ CodeCraft/
 ├── Server/                  # Django backend
 │   ├── App/                 # Main Django application
 │   │   ├── views.py         # API endpoint definitions
-│   │   └── models.py        # Database models
 │   ├── api/                 # Core functionality modules
 │   │   ├── judge0_calls.py  # Code execution via Judge0 API
 │   │   ├── gemini_api_calls.py # AI assistance using Gemini API
@@ -338,9 +337,8 @@ CodeCraft/
 ## Deployment
 
 ### Frontend Deployment
-
 The frontend is deployed on *netlify* :
-<!-- mention the  site  used to deploy-->
+
 ### Backend Deployment
 The Django backend is deployed on *render* 
 
